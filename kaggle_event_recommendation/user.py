@@ -19,12 +19,12 @@ class Users:
         cleaner = data_clean.DataCleaner()
         num_users = len(user_event_entity.user_index.keys())
 
-        with open('data/user.csv', 'r') as user_f:
+        with open('data/users.csv', 'r') as user_f:
             col_names = user_f.readline().strip().split(',')
             self.user_feature = ss.dok_matrix((num_users, len(col_names) - 1))
             for line in user_f.readlines():
                 cols = line.strip().split(',')
-                if user_event_entity.user_index.has_keys(cols[0]):
+                if cols[0] in user_event_entity.user_index.keys():
                     u_index = user_event_entity.user_index[cols[0]]
                     self.user_feature[u_index, 0] = cleaner.getLocaleId(cols[1])
                     self.user_feature[u_index, 1] = cleaner.getBirthYearInt(cols[2])
@@ -43,8 +43,8 @@ class Users:
             u1_index = user_event_entity.user_index[u1]
             u2_index = user_event_entity.user_index[u2]
 
-            if not self.user_sim_matrix.has_key((u1_index, u2_index)):
-                u_sim = sim(self.user_feature.getrow(u1_index).todense, self.user_feature.getrow(u2_index).todense)
+            if (u1_index, u2_index) not in self.user_sim_matrix.keys():
+                u_sim = sim(self.user_feature.getrow(u1_index).todense(), self.user_feature.getrow(u2_index).todense())
                 self.user_sim_matrix[u1_index, u2_index] = u_sim
                 self.user_sim_matrix[u2_index, u1_index] = u_sim
         sio.mmwrite('user_sim_matrix', self.user_sim_matrix)

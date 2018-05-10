@@ -22,19 +22,19 @@ class Friends:
         self.user_friends_num = np.zeros(num_user)
         self.user_friends_matrix = ss.dok_matrix((num_user, num_user))
 
-        with open('user_friends.csv', 'r') as friends_f:
+        with open('data/user_friends.csv', 'r') as friends_f:
             friends_f.readline()
             for line in friends_f.readlines():
                 cols = line.strip().split(',')
                 user = cols[0]
 
-                if user_event_entity.has_key(user):
+                if user in user_event_entity.user_index.keys():
                     friends = cols[1].split(' ')
                     user_index = user_event_entity.user_index[user]
                     # user 的 friend 数量
                     self.user_friends_num = len(friends)
                     for friend in friends:
-                        if user_event_entity.user_index.has_key(friend):
+                        if friend in user_event_entity.user_index.keys():
                             friend_index = user_event_entity.user_index[friend]
                             # friend 在所有event的score的平均， 代表了friend对活动的兴趣程度
                             events_for_user = user_event_entity.user_event_scores.getrow(friend_index).todense()

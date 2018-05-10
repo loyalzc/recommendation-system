@@ -24,7 +24,7 @@ class EventAttendees:
             for line in event_att_f.readlines():
                 cols = line.strip().split(',')
                 event_id = cols[0]
-                if user_event_entity.event_index.has_key(event_id):
+                if event_id in user_event_entity.event_inde.keys():
                     event_index = user_event_entity.event_index[event_id]
                     # event 流行度  num_yes - num_no
                     self.event_poplarity[event_index, 0] = len(cols[1].split(' ')) - len(cols[4].split(' '))
