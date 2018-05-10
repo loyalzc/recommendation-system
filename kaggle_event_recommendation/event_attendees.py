@@ -30,3 +30,4 @@ class EventAttendees:
                     self.event_poplarity[event_index, 0] = len(cols[1].split(' ')) - len(cols[4].split(' '))
         self.event_poplarity = normalize(self.event_poplarity, norm='l1', axis=0, copy=False)
         sio.mmwrite('event_popularlity', self.event_poplarity)
+

@@ -49,3 +49,4 @@ class Friends:
         self.user_friends_matrix = normalize(self.user_friends_matrix, norm='l1', axis=0, copy=False)
 
         sio.mmwrite('user_friends_matrix', self.user_friends_matrix)
+
