@@ -19,15 +19,15 @@ class EventAttendees:
 
         self.event_poplarity = ss.dok_matrix((num_event, 1))
 
-        with open('event_attendees.csv', 'r') as event_att_f:
+        with open('data/event_attendees.csv', 'r') as event_att_f:
             event_att_f.readline()
             for line in event_att_f.readlines():
                 cols = line.strip().split(',')
                 event_id = cols[0]
-                if event_id in user_event_entity.event_inde.keys():
+                if user_event_entity.event_index.__contains__(event_id):
                     event_index = user_event_entity.event_index[event_id]
                     # event 流行度  num_yes - num_no
                     self.event_poplarity[event_index, 0] = len(cols[1].split(' ')) - len(cols[4].split(' '))
         self.event_poplarity = normalize(self.event_poplarity, norm='l1', axis=0, copy=False)
-        sio.mmwrite('event_popularlity', self.event_poplarity)
+        sio.mmwrite('prep_data/event_popularlity', self.event_poplarity)
 

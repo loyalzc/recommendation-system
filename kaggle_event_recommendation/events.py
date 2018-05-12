@@ -33,7 +33,7 @@ class Events:
             for line in events_f.readlines():
                 cols = line.strip().split(',')
                 event_id = cols[0]
-                if event_id in user_event_entity.event_index.keys():
+                if user_event_entity.event_index.__contains__(event_id):
                     event_index = user_event_entity.event_index[event_id]
                     self.event_feature_matrix[event_index, 0] = cleaner.getJoinedYearMonth(cols[2])
                     self.event_feature_matrix[event_index, 1] = cleaner.getFeatureHash(cols[3])
@@ -47,10 +47,10 @@ class Events:
                         self.event_cont_feture[event_index, i - 9] = cols[i]
 
             self.event_feature_matrix = normalize(self.event_feature_matrix, norm='l1', axis=0, copy=False)
-            sio.mmwrite('event_feature_matrix', self.event_feature_matrix)
+            sio.mmwrite('prep_data/event_feature_matrix', self.event_feature_matrix)
 
             self.event_cont_feture = normalize(self.event_cont_feture, norm='l1', axis=0, copy=False)
-            sio.mmwrite('event_feature_matrix', self.event_cont_feture)
+            sio.mmwrite('prep_data/event_feature_matrix', self.event_cont_feture)
 
             self.event_sim_matrix = ss.dok_matrix((num_event, num_event))
             self.event_cont_sim = ss.dok_matrix((num_event, num_event))
@@ -58,13 +58,13 @@ class Events:
             for e1, e2 in user_event_entity.unique_event_pairs:
                 e1_index = user_event_entity.event_index[e1]
                 e2_index = user_event_entity.event_index[e2]
-                if (e1_index, e2_index) not in self.event_sim_matrix.keys():
+                if not self.event_sim_matrix.__contains__((e1_index, e2_index)):
                     event_sim = psim(self.event_feature_matrix.getrow(e1_index).todense(),
                                      self.event_feature_matrix.getrow(e2_index).todense())
 
                     self.event_sim_matrix[e1_index, e2_index] = event_sim
                     self.event_sim_matrix[e2_index, e1_index] = event_sim
-                if (e1_index, e2_index) not in self.event_cont_sim.keys():
+                if not self.event_cont_sim.__contains__((e1_index, e2_index)):
 
                     event_cont_sim = csim(self.event_cont_feture.getrow(e1_index).todense(),
                                           self.event_cont_feture.getrow(e2_index).todense())
@@ -72,5 +72,5 @@ class Events:
                     self.event_cont_sim[e1_index, e2_index] = event_cont_sim
                     self.event_cont_sim[e2_index, e1_index] = event_cont_sim
 
-        sio.mmwrite("event_sim_matrix", self.event_sim_matrix)
-        sio.mmwrite("event_cont_sim", self.event_cont_sim)
+        sio.mmwrite("prep_data/event_sim_matrix", self.event_sim_matrix)
+        sio.mmwrite("prep_data/event_cont_sim", self.event_cont_sim)

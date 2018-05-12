@@ -28,13 +28,13 @@ class Friends:
                 cols = line.strip().split(',')
                 user = cols[0]
 
-                if user in user_event_entity.user_index.keys():
+                if user_event_entity.user_index.__contains__(user):
                     friends = cols[1].split(' ')
                     user_index = user_event_entity.user_index[user]
                     # user 的 friend 数量
                     self.user_friends_num = len(friends)
                     for friend in friends:
-                        if friend in user_event_entity.user_index.keys():
+                        if user_event_entity.user_index.__contains__(friend):
                             friend_index = user_event_entity.user_index[friend]
                             # friend 在所有event的score的平均， 代表了friend对活动的兴趣程度
                             events_for_user = user_event_entity.user_event_scores.getrow(friend_index).todense()
@@ -45,8 +45,8 @@ class Friends:
         sum_num_friends = self.user_friends_num.sum(axis=0)
         self.user_friends_num = self.user_friends_num / sum_num_friends
 
-        sio.mmwrite('user_friends_num', np.matrix(self.user_friends_num))
+        sio.mmwrite('prep_data/user_friends_num', np.matrix(self.user_friends_num))
         self.user_friends_matrix = normalize(self.user_friends_matrix, norm='l1', axis=0, copy=False)
 
-        sio.mmwrite('user_friends_matrix', self.user_friends_matrix)
+        sio.mmwrite('prep_data/user_friends_matrix', self.user_friends_matrix)
 

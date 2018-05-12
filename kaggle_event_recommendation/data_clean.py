@@ -72,7 +72,7 @@ class DataCleaner:
         if len(value.strip()) == 0:
             return -1
         else:
-            return int(hashlib.sha224(value).hexdigest()[0:4], 16)
+            return int(hashlib.sha224(value.encode('utf-8')).hexdigest()[0:4], 16)
 
     def getFloatValue(self, value):
         if len(value.strip()) == 0:

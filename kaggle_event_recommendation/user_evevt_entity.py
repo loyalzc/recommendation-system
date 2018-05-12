@@ -52,7 +52,7 @@ class User_Event_Entity:
                 event_j = self.event_index[cols[1]]
                 # 用户评分为 三级： 感兴趣、无所谓、不感兴趣
                 self.user_event_scores[user_i, event_j] = int(cols[4]) - int(cols[5])
-        sio.mmwrite('matrix_user_event_scores', self.user_event_scores)
+        sio.mmwrite('prep_data/matrix_user_event_scores', self.user_event_scores)
         # 找到所有关联的user event; 指具有多user 对 evenet 或者多event 对 user
         self.unique_user_pairs = set()
         self.unique_event_pairs = set()
@@ -64,5 +64,5 @@ class User_Event_Entity:
             events = events_for_user[user]
             if len(events) > 2:
                 self.unique_event_pairs.update(itertools.combinations(events, 2))
-        pickle.dump(self.user_index, open("PE_userIndex.pkl", 'wb'))
-        pickle.dump(self.event_index, open("PE_eventIndex.pkl", 'wb'))
+        pickle.dump(self.user_index, open("prep_data/user_index.pkl", 'wb'))
+        pickle.dump(self.event_index, open("prep_data/event_index.pkl", 'wb'))
