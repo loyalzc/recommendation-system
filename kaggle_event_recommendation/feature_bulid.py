@@ -13,15 +13,15 @@ import scipy.io as sio
 class Feature_bulid:
 
     def __init__(self):
-        self.user_index = pickle.load(open(''))
-        self.event_index = pickle.load(open(''))
-        self.user_event_scores = sio.mmread(open(''))
-        self.user_sim_matrix = sio.mmread(open(''))
-        self.event_sim_matrix = sio.mmread(open(''))
-        self.event_cont_sim = sio.mmread(open(''))
-        self.user_friend_num = sio.mmread(open(''))
-        self.user_friend_matrix = sio.mmread(open(''))
-        self.event_popularity = sio.mmread(open(''))
+        self.user_index = pickle.load(open('prep_data/user_index.pkl', 'rb'))
+        self.event_index = pickle.load(open('prep_data/event_index.pkl', 'rb'))
+        self.user_event_scores = sio.mmread('prep_data/user_event_scores_matrix.mtx')
+        self.user_sim_matrix = sio.mmread('prep_data/user_sim_matrix.mtx')
+        self.event_sim_matrix = sio.mmread('prep_data/event_sim_matrix.mtx')
+        self.event_cont_sim = sio.mmread('prep_data/event_cont_sim.mtx')
+        self.user_friend_num = sio.mmread('prep_data/user_friends_num.mtx')
+        self.user_friend_matrix = sio.mmread('prep_data/user_friends_matrix.mtx')
+        self.event_popularity = sio.mmread('prep_data/event_popularlity.mtx')
 
     def _user_recom(self, user_id, event_id):
         """user based CF 得到event的推荐度"""
@@ -113,11 +113,16 @@ class Feature_bulid:
         train_data['event_poplar'] = event_poplar
 
         cols = ['invited', 'user_recom', 'event_precom', 'event_crecom', 'user_friend_num', 'user_friend_activ', 'event_poplar']
-
+        train_data.to_csv('feature_data.csv', index=False)
         train_x = train_data[cols].values
         train_y = train_data['interested'].values
 
         return train_x, train_y
+
+
+if __name__ == '__main__':
+    fb = Feature_bulid()
+    fb.bulid_feature()
 
 
 

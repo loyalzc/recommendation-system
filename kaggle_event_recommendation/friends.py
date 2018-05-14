@@ -19,7 +19,7 @@ class Friends:
     def __init__(self, user_event_entity):
         num_user = len(user_event_entity.user_index.keys())
 
-        self.user_friends_num = np.zeros(num_user)
+        self.user_friends_num = np.zeros((num_user))
         self.user_friends_matrix = ss.dok_matrix((num_user, num_user))
 
         with open('data/user_friends.csv', 'r') as friends_f:
@@ -32,7 +32,7 @@ class Friends:
                     friends = cols[1].split(' ')
                     user_index = user_event_entity.user_index[user]
                     # user 的 friend 数量
-                    self.user_friends_num = len(friends)
+                    self.user_friends_num[user_index] = len(friends)
                     for friend in friends:
                         if user_event_entity.user_index.__contains__(friend):
                             friend_index = user_event_entity.user_index[friend]
@@ -44,9 +44,7 @@ class Friends:
         # 归一化
         sum_num_friends = self.user_friends_num.sum(axis=0)
         self.user_friends_num = self.user_friends_num / sum_num_friends
-
         sio.mmwrite('prep_data/user_friends_num', np.matrix(self.user_friends_num))
         self.user_friends_matrix = normalize(self.user_friends_matrix, norm='l1', axis=0, copy=False)
-
         sio.mmwrite('prep_data/user_friends_matrix', self.user_friends_matrix)
 

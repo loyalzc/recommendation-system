@@ -5,7 +5,6 @@
 @Function:
 """
 
-from kaggle_event_recommendation.data_clean import DataCleaner
 from kaggle_event_recommendation.events import Events
 from kaggle_event_recommendation.user import Users
 from kaggle_event_recommendation.friends import Friends
@@ -20,16 +19,16 @@ def data_prepare():
     print("---1：get user and event index...")
     user_event_entity = User_Event_Entity()
     print("   ---end...")
-    print("2：get user similarity matrix...")
+    print("---2：get user similarity matrix...")
     Users(user_event_entity)
     print("   ---end...")
-    print("3：get friend matrix...")
+    print("---3：get friend matrix...")
     Friends(user_event_entity)
     print("   ---end...")
-    print("4：get event similarity matrix...")
+    print("---4：get event similarity matrix...")
     Events(user_event_entity)
     print("   ---end...")
-    print("5：get event popularity...")
+    print("---5：get event popularity...")
     EventAttendees(user_event_entity)
     print("   ---end...")
 
